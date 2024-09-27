@@ -1,6 +1,7 @@
 
 package gr.codehub.rest.webtechnikon.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,7 +30,7 @@ public class User implements Serializable {
     private Long id;
 
     @Column(name = "vat", unique = true, nullable = false)
-    private Long vat;
+    private String vat;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -41,7 +42,7 @@ public class User implements Serializable {
     private String address;
 
     @Column(name = "phone_number", unique = true, nullable = false)
-    private Long phoneNumber;
+    private String phoneNumber;
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;
@@ -59,5 +60,6 @@ public class User implements Serializable {
     private UserTypeEnum userType;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Property> properties;
 }

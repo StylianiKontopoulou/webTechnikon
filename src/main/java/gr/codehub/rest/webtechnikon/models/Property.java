@@ -1,5 +1,6 @@
 package gr.codehub.rest.webtechnikon.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,35 +27,36 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class Property implements Serializable {
-    
+
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(unique = true, nullable = false)
     private Long propertyId;
-    
+
     @Column(nullable = false)
     private String address;
-    
+
     @Column(nullable = false)
     private int yearOfConstruction;
-    
+
     @Column(nullable = false)
     private PropertyType propertyType;
-    
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    
+
     @Column(name = "isActive", nullable = false)
     private Boolean isActive;
 
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<PropertyRepair> propertyRepairs;
 
     @Override
     public String toString() {
-        return "Property{" + "id=" + id + ", propertyId=" + propertyId + ", address=" + address + ", yearOfConstruction=" + yearOfConstruction + ", propertyType=" + propertyType + ", propertyOwner=" + user.getId() + ", propertyRepairs=" + propertyRepairs + ", isActive=" + isActive + '}';
+        return "Property{" + "id=" + id + ", address=" + address + ", propretyId=" + propertyId + ", yearOfConstruction=" + yearOfConstruction + ", propertyType=" + propertyType + ", userId=" + user.getId() + ", propertyRepairs=" + propertyRepairs + ", isActive=" + isActive + '}';
     }
 }

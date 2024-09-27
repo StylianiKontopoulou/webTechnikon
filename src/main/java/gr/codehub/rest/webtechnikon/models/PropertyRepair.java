@@ -1,5 +1,6 @@
 package gr.codehub.rest.webtechnikon.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,7 +28,8 @@ public class PropertyRepair implements Serializable {
     private Long repairId;
 
     @ManyToOne
-    @JoinColumn(name = "property_id")
+    @JoinColumn(name = "property")
+    @JsonIgnore
     private Property property;
 
     @Column(nullable = false)
