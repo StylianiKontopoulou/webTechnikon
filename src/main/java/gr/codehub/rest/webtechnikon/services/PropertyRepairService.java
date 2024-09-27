@@ -16,5 +16,6 @@ public interface PropertyRepairService {
     List<PropertyRepair> searchRepairsByDateRage(LocalDate startDate,LocalDate endDate);
     List<PropertyRepair> searchRepairsBySubmissionDate(LocalDate submissionDate);
     void softDelete(Long repairId);
+    List<PropertyRepair> findRepairsByProperty(Long propertyId);
  
 }

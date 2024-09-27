@@ -89,7 +89,7 @@ public class PropertyRepository implements Repository<Property> {
 
     public List<Property> findByOwnerVatNumber(Long vatNumber) {
         TypedQuery<Property> query = entityManager.createQuery(
-                "SELECT p FROM Property p WHERE p.User.vat = :vatNumber AND p.isActive = true", Property.class);
+                "SELECT p FROM Property p WHERE p.user.vat = :vatNumber AND p.isActive = true", Property.class);
         query.setParameter("vatNumber", vatNumber);
         return query.getResultList();
     }

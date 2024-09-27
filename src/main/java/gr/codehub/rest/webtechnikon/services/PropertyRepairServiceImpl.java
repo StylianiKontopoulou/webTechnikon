@@ -21,12 +21,12 @@ import java.util.stream.Collectors;
 public class PropertyRepairServiceImpl implements PropertyRepairService {
 
     @Inject
-    private  PropertyRepairRepository propertyRepairRepository;
+    private PropertyRepairRepository propertyRepairRepository;
     @Inject
     private PropertyRepository propertyRepository;
     @Inject
     private UserRepository userRepository;
-   
+
     @Override
     public void initiateRepair(Long ownerId, Long propertyId, TypeOfRepairEnum typeOfRepair, String shortDescription, String fullDescription) {
         User owner = userRepository.findById(ownerId)
@@ -136,15 +136,21 @@ public class PropertyRepairServiceImpl implements PropertyRepairService {
 
     @Override
     public void softDelete(Long repairId) throws UserExistsException {
-          PropertyRepair repair = propertyRepairRepository.findById(repairId)
-            .orElseThrow(() -> new IllegalStateException("Repair with id " + repairId + " does not exist"));
+        PropertyRepair repair = propertyRepairRepository.findById(repairId)
+                .orElseThrow(() -> new IllegalStateException("Repair with id " + repairId + " does not exist"));
 
         if (repair.getStatus().equals(StatusOfRepairEnum.PENDING)) {
-            repair.setIsActive(false); 
+            repair.setIsActive(false);
             propertyRepairRepository.update(repair);
         } else {
             throw new IllegalStateException("Repair is not pending and cannot be deleted");
         }
     }
-}
 
+    @Override
+    public List<PropertyRepair> findRepairsByProperty(Long propertyId) {
+        return propertyRepairRepository.findAll().stream()
+                .filter(repair -> propertyId.equals(repair.getProperty().getId()))
+                .collect(Collectors.toList());
+    }
+}
