@@ -1,0 +1,762 @@
+{
+	"info": {
+		"_postman_id": "2bdaae18-641e-4f20-8c6d-f1253bc455b4",
+		"name": "webTechnikon",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33890979"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Register user",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"vat\":\"312743750\",\r\n    \"firstName\":\"Anastasakis\",\r\n    \"lastName\":\"Zacharoglou\",\r\n    \"address\": \"Irodotou 1\",\r\n    \"phoneNumber\": \"2102525996\",\r\n    \"email\":\"tes1t3@test.com\",\r\n    \"userName\":\"testusername\",\r\n    \"password\":\"testpass1@\",\r\n    \"userType\": \"ADMIN\",\r\n    \"isActive\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/users/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"vat\":\"312743750\",\r\n    \"firstName\":\"Anastasakis\",\r\n    \"lastName\":\"Zacharoglou\",\r\n    \"address\": \"Lesvou 1\",\r\n    \"phoneNumber\": \"2102525996\",\r\n    \"email\":\"tes1at3@test.com\",\r\n    \"userName\":\"testusername\",\r\n    \"password\":\"tesTpass1@\",\r\n    \"userType\": \"ADMIN\",\r\n    \"isActive\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/users/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic dGVzdGFraXM6dGVzdGtpUGFzczFA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/users/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login user",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"username\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/users/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/users/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Properties",
+			"item": [
+				{
+					"name": "Create property",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"address\": \"Irodotou 1\",\r\n    \"propertyId\": 12,\r\n    \"user\": {\r\n        \"id\": 1\r\n    },\r\n    \"yearOfConstruction\": 2024,\r\n    \"propertyType\": 1,\r\n    \"isActive\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/properties",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"properties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Soft delete property",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/properties/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"properties",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all properties",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/properties",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"properties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user's properties",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/properties?userId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"properties"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get property details by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/properties/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"properties",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Property repairs",
+			"item": [
+				{
+					"name": "Get all repairs for a property",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/repairs?propertyId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"repairs"
+							],
+							"query": [
+								{
+									"key": "propertyId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get repair details by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/repairs/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"repairs",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a property repair",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"property\": {\r\n        \"id\": 1\r\n    },\r\n    \"typeOfRepair\": 0,\r\n    \"shortDescription\": \"Plumbing operations in the kitchen\",\r\n    \"submissionDate\":\"2024-09-09\",\r\n    \"description\": \"Lorem ipsum dolor sit amet\",\r\n    \"status\": 0,\r\n    \"isActive\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/repairs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"repairs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a property repair",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"property\": {\r\n        \"id\": 1\r\n    },\r\n    \"typeOfRepair\": 0,\r\n    \"shortDescription\": \"Plumbing operations in the kitchen\",\r\n    \"submissionDate\":\"2024-09-09\",\r\n    \"description\": \"Lorem ipsum dolor sit amet\",\r\n    \"status\": 1,\r\n    \"isActive\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/repairs/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"repairs",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a property repair",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/repairs/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"repairs",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Search repairs - fetch all",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic dGVzdGFraXM6dGVzdGtpUGFzczFA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/admin/repairs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"admin",
+								"repairs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search repairs - by status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic dGVzdGFraXM6dGVzdGtpUGFzczFA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/admin/repairs?status=PENDING",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"admin",
+								"repairs"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "PENDING"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search repairs - by status & description",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic dGVzdGFraXM6dGVzdGtpUGFzczFA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/admin/repairs?description=lorem&status=PENDING",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"admin",
+								"repairs"
+							],
+							"query": [
+								{
+									"key": "description",
+									"value": "lorem"
+								},
+								{
+									"key": "status",
+									"value": "PENDING"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search users - fetch all",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic dGVzdGFraXM6dGVzdGtpUGFzczFA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/admin/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"admin",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search users - by name",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic dGVzdGFraXM6dGVzdGtpUGFzczFA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/admin/users?name=oglou",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"admin",
+								"users"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "oglou"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search users - by email",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic dGVzdGFraXM6dGVzdGtpUGFzczFA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/admin/users?email=test",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"admin",
+								"users"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "test"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search properties - fetch all",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic dGVzdGFraXM6dGVzdGtpUGFzczFA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/admin/properties",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"admin",
+								"properties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search properties - by type",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic dGVzdGFraXM6dGVzdGtpUGFzczFA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/admin/properties",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"admin",
+								"properties"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search properties - by location",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic dGVzdGFraXM6dGVzdGtpUGFzczFA",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/webTechnikon/resources/admin/properties",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webTechnikon",
+								"resources",
+								"admin",
+								"properties"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{password}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "{{username}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "username",
+			"value": "username",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "password",
+			"type": "string"
+		}
+	]
+}

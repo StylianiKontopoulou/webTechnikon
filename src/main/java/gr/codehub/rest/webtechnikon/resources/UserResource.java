@@ -1,71 +1,111 @@
 package gr.codehub.rest.webtechnikon.resources;
 
-import gr.codehub.rest.webtechnikon.models.Property;
-import gr.codehub.rest.webtechnikon.models.PropertyRepair;
-import gr.codehub.rest.webtechnikon.services.PropertyRepairService;
-import gr.codehub.rest.webtechnikon.services.PropertyService;
+import gr.codehub.rest.webtechnikon.models.LoginRequest;
+import gr.codehub.rest.webtechnikon.models.User;
+import gr.codehub.rest.webtechnikon.models.UserTypeEnum;
 import gr.codehub.rest.webtechnikon.services.UserService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
-@Path("owner")
-@Slf4j     
+@Slf4j
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Path("/users")
 public class UserResource {
-    
+
     @Inject
     private UserService userService;
-    @Inject
-    private PropertyService propertyService;
-    @Inject
-    private PropertyRepairService propertyRepairService;
-    
-//  @POST
-//    @Path("properties")
-//    public Response createProperty(Property req) {
-//        Property property = propertyService.createProperty(req);
-//        return Response.status(Response.Status.CREATED).entity(property).build();
-//    }
-    
-     // GET owner's properties
-    @GET
-    @Path("/properties")
-    public Response getOwnerProperties(@QueryParam("ownerId") Long ownerId) {
-        List<Property> properties = propertyService.findByOwnerVatNumber(ownerId);
-        return Response.ok(properties).build();
+
+    @Context
+    private HttpServletRequest requestContext;
+
+    @POST
+    @Path("/register")
+    public Response registerUser(User req) {
+        try {
+            User user = userService.registerUser(req);
+            return Response.status(Response.Status.CREATED).entity(user).build();
+        } catch (Exception e) {
+            log.error("Error registering user", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
     }
-    
-     // GET repairs for a specific property
-    @GET
-    @Path("/properties/{propertyId}/repairs")
-    public Response getPropertyRepairs(@PathParam("propertyId") Long propertyId) {
-        List<PropertyRepair> repairs = propertyRepairService.findRepairsByProperty(propertyId);
-        return Response.ok(repairs).build();
+
+    @POST
+    @Path("/login")
+    public Response loginUser(LoginRequest req) {
+        try {
+            User user = userService.authenticate(req.getUserName(), req.getPassword());
+            return Response.ok().entity(user).build();
+        } catch (Exception e) {
+            log.error("Error logging in user", e);
+            return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage()).build();
+        }
     }
-    // Add repair for a specific property
-//    @POST
-//    @Path("/properties/{propertyId}/repairs")
-//    public Response addRepair(@HeaderParam("ownerId") Long ownerId,@PathParam("propertyId") Long propertyId, PropertyRepair repair) {
-//        propertyRepairService.initiateRepair(οwnerId, propertyId, repair.getTypeOfRepair(), repair.getShortDescription(), repair.getDescription());
-//        return Response.status(Response.Status.CREATED).build();
-//    }
-    // Delete repair (only if it is not complete)
+
+    @GET
+    @Path("/{userId}")
+    @RolesAllowed("ALL")
+    public Response getUserDetails(@PathParam("userId") Long userId) {
+        User currentUser = (User) requestContext.getAttribute("currentUser");
+        if (currentUser.getUserType().equals(UserTypeEnum.PROPERTY_OWNER) && !currentUser.getId().equals(userId)) {
+            return Response.status(Response.Status.FORBIDDEN).entity("You are not allowed to access this resource").build();
+        }
+        
+        try {
+            User user = userService.getUserById(userId);
+            if (user != null) {
+                return Response.ok(user).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
+            log.error("Error getting user details", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+
+    @PUT
+    @Path("/{userId}")
+    @RolesAllowed("ALL")
+    public Response updateUserDetails(@PathParam("userId") Long userId, User user) {
+        User currentUser = (User) requestContext.getAttribute("currentUser");
+        if (currentUser.getUserType().equals(UserTypeEnum.PROPERTY_OWNER) && !currentUser.getId().equals(userId)) {
+            return Response.status(Response.Status.FORBIDDEN).entity("You are not allowed to access this resource").build();
+        }
+        
+        try {
+            userService.updateUser(userId, user);
+            return Response.ok().build();
+        } catch (Exception e) {
+            log.error("Error updating user details", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+
     @DELETE
-    @Path("/repairs/{repairId}")
-    public Response deleteRepair(@PathParam("repairId") Long repairId) {
-        propertyRepairService.deletePendingRepair(repairId);
-        return Response.noContent().build();
+    @Path("/{userId}")
+    @RolesAllowed("ADMIN")
+    public Response deleteUser(@PathParam("userId") Long userId) {
+        try {
+            userService.deleteUser(userId);
+            return Response.noContent().build();
+        } catch (Exception e) {
+            log.error("Error deleting user", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
     }
- 
 }

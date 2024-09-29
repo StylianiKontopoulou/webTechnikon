@@ -1,97 +1,41 @@
 package gr.codehub.rest.webtechnikon.repositories;
 
 import gr.codehub.rest.webtechnikon.models.Property;
+import gr.codehub.rest.webtechnikon.models.PropertyType;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RequestScoped
-public class PropertyRepository implements Repository<Property> {
+public class PropertyRepository extends AbstractRepository<Property> {
 
-    @PersistenceContext(unitName = "Persistence")
-    private EntityManager entityManager;
-
-    @Override
-    @Transactional
-    public Property create(Property property) {
-        entityManager.persist(property);
-        return property;
+    public PropertyRepository() {
+        super(Property.class);
     }
 
-    @Override
-    @Transactional
-    public void update(Property property) {
-        entityManager.merge(property);
-    }
-
-    @Override
-    @Transactional
-    public void delete(Property property) {
-        // Merge the detached entity and get the managed instance
-        Property managedProperty = entityManager.contains(property) ? property : entityManager.merge(property);
-
-        // Now remove the managed instance
-        entityManager.remove(managedProperty);
-        
-        entityManager.flush();
-    }
-
-    @Transactional
-    public void softDelete(Property property) {
-        property.setIsActive(false);
-        entityManager.merge(property);
-    }
-
-    @Override
-    @Transactional
-    public <V> Optional<Property> findById(V id) {
-        try {
-            Property property = entityManager.find(Property.class, id);
-            if (property != null && property.getIsActive()) {
-                return Optional.of(property);
-            }
-        } catch (Exception e) {
-            log.debug("Property not found");
+    public List<Property> findPropertiesByCriteria(String location, String type) {
+        String query = "SELECT p FROM Property p WHERE 1=1";
+        if (location != null && !location.isEmpty()) {
+            query += " AND p.address LIKE :location";
         }
-        return Optional.empty();
-    }
-
-    @Override
-    @Transactional
-    public List<Property> findAll() {
-        TypedQuery<Property> query = entityManager.createQuery(
-                "SELECT p FROM Property p WHERE p.isActive = true", Property.class);
-        return query.getResultList();
-    }
-
-    public Optional<Property> findByPropertyIdNumber(Long propertyId) {
-        try {
-            TypedQuery<Property> query = entityManager.createQuery(
-                    "SELECT p FROM Property p WHERE p.Id = :propertyId AND p.isActive = true", Property.class);
-            query.setParameter("propertyId", propertyId);
-            List<Property> result = query.getResultList();
-            if (result.isEmpty()) {
-                return Optional.empty();
-            } else {
-                return Optional.of(result.get(0));
-            }
-        } catch (Exception e) {
-            log.debug("Property with this propertyid not found");
+        if (type != null && !type.isEmpty()) {
+            query += " AND p.propertyType = :type";
         }
-        return Optional.empty();
+
+        TypedQuery<Property> q = entityManager.createQuery(query, Property.class);
+        if (location != null && !location.isEmpty()) {
+            q.setParameter("location", "%" + location + "%");
+        }
+        if (type != null && !type.isEmpty()) {
+            q.setParameter("type", PropertyType.valueOf(type));
+        }
+
+        return q.getResultList();
     }
 
-    public List<Property> findByOwnerVatNumber(Long vatNumber) {
-        TypedQuery<Property> query = entityManager.createQuery(
-                "SELECT p FROM Property p WHERE p.user.vat = :vatNumber AND p.isActive = true", Property.class);
-        query.setParameter("vatNumber", vatNumber);
-        return query.getResultList();
+    public List<Property> findPropertiesByUserId(Long userId) {
+        return entityManager.createQuery("SELECT p FROM Property p WHERE p.user.id = :userId", Property.class)
+                .setParameter("userId", userId)
+                .getResultList();
     }
-
 }

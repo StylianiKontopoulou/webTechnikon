@@ -1,6 +1,5 @@
 package gr.codehub.rest.webtechnikon.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 
 import lombok.*;
 
@@ -25,11 +24,10 @@ public class PropertyRepair implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long repairId;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "property")
-    @JsonIgnore
+    @JoinColumn(name = "property_id")
     private Property property;
 
     @Column(nullable = false)
@@ -40,14 +38,14 @@ public class PropertyRepair implements Serializable {
     private String shortDescription;
 
     @Column(nullable = false)
-    private LocalDate submissionDate;
+    private Date submissionDate;
 
     @Column(nullable = false)
     private String description;
 
-    private LocalDate proposedStartDate;
+    private Date proposedStartDate;
 
-    private LocalDate proposedEndDate;
+    private Date proposedEndDate;
 
     private int proposedCost;
 
@@ -57,16 +55,15 @@ public class PropertyRepair implements Serializable {
     @Enumerated(EnumType.STRING)
     private StatusOfRepairEnum status;
 
-    private LocalDate actualStartDate;
+    private Date actualStartDate;
 
-    private LocalDate actualEndDate;
-    // Constructors, Getters, Setters, toString() from lombok
+    private Date actualEndDate;
     
     @Column(name = "isActive", nullable = false)
     private Boolean isActive;
 
     @Override
     public String toString() {
-        return "PropertyRepair{" + "repairId=" + repairId + ", property=" + property.getId() + ", typeOfRepair=" + typeOfRepair + ", shortDescription=" + shortDescription + ", submissionDate=" + submissionDate + ", description=" + description + ", proposedStartDate=" + proposedStartDate + ", proposedEndDate=" + proposedEndDate + ", proposedCost=" + proposedCost + ", ownerAcceptance=" + ownerAcceptance + ", status=" + status + ", actualStartDate=" + actualStartDate + ", actualEndDate=" + actualEndDate + ", isActive=" + isActive +'}';
+        return "PropertyRepair{" + "repairId=" + id + ", property=" + property.getId() + ", typeOfRepair=" + typeOfRepair + ", shortDescription=" + shortDescription + ", submissionDate=" + submissionDate + ", description=" + description + ", proposedStartDate=" + proposedStartDate + ", proposedEndDate=" + proposedEndDate + ", proposedCost=" + proposedCost + ", ownerAcceptance=" + ownerAcceptance + ", status=" + status + ", actualStartDate=" + actualStartDate + ", actualEndDate=" + actualEndDate + ", isActive=" + isActive +'}';
     }
 }

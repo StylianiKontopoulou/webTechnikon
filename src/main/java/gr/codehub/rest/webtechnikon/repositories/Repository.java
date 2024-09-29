@@ -2,15 +2,16 @@ package gr.codehub.rest.webtechnikon.repositories;
 
 import java.util.List;
 import java.util.Optional;
+import jakarta.persistence.PersistenceException;
 
 public interface Repository<T> {
-    T create(T t);
 
-    void update(T t);
-
-    void delete(T t);
-
-    <V> Optional<T>  findById(V v);
-
+    T create(T entity);
+    void update(T entity) throws PersistenceException;
+    void delete(T entity);
+    void softDelete(Long id);
+    void restore(Long id);
+    void deleteById(Long id);
+    Optional<T> findById(Long id);
     List<T> findAll();
 }

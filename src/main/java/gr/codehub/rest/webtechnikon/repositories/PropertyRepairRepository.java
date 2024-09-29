@@ -1,47 +1,44 @@
 package gr.codehub.rest.webtechnikon.repositories;
 
-import gr.codehub.rest.webtechnikon.exceptions.OwnerNotFoundException;
+import gr.codehub.rest.webtechnikon.exceptions.UserNotFoundException;
 import gr.codehub.rest.webtechnikon.models.PropertyRepair;
+import gr.codehub.rest.webtechnikon.models.StatusOfRepairEnum;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RequestScoped
-public class PropertyRepairRepository implements Repository<PropertyRepair>{
-    
-    @PersistenceContext(unitName = "Persistence")
-    private  EntityManager entityManager;
+public class PropertyRepairRepository extends AbstractRepository<PropertyRepair> {
 
-    @Override
-    public PropertyRepair create(PropertyRepair propertyRepair) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(propertyRepair);
-        entityManager.getTransaction().commit();
-        return propertyRepair;
+    public PropertyRepairRepository() {
+        super(PropertyRepair.class);
     }
 
-    @Override
-    public void update(PropertyRepair v) throws PersistenceException {
-        if (v instanceof PropertyRepair) {
-            PropertyRepair repair = (PropertyRepair) v;
-            entityManager.getTransaction().begin();
-            entityManager.merge(repair);//Ενημερώνει τον πίνακα με τα νέα δεδομένα 
-            entityManager.getTransaction().commit();
+    public List<PropertyRepair> findRepairsByCriteria(String description, String status) {
+        String query = "SELECT r FROM PropertyRepair r WHERE 1=1";
+        if (description != null && !description.isEmpty()) {
+            query += " AND r.description LIKE :description";
         }
+        if (status != null && !status.isEmpty()) {
+            query += " AND r.status = :status";
+        }
+        
+        TypedQuery<PropertyRepair> q = entityManager.createQuery(query, PropertyRepair.class);
+        if (description != null && !description.isEmpty()) {
+            q.setParameter("description", "%" + description + "%");
+        }
+        if (status != null && !status.isEmpty()) {
+            q.setParameter("status", StatusOfRepairEnum.valueOf(status));
+        }
+        
+        return q.getResultList();
     }
 
-    @Override
-    public void delete(PropertyRepair propertyRepair) {
-        entityManager.getTransaction().begin();
-        entityManager.remove(propertyRepair);
-        entityManager.getTransaction().commit();
+    public List<PropertyRepair> findRepairsByPropertyId(Long propertyId) {
+        return entityManager.createQuery("SELECT r FROM PropertyRepair r WHERE r.property.id = :propertyId", PropertyRepair.class)
+                .setParameter("propertyId", propertyId)
+                .getResultList();
     }
 
     public List<PropertyRepair> searchByDateRange(LocalDate startDate, LocalDate endDate) {
@@ -51,53 +48,8 @@ public class PropertyRepairRepository implements Repository<PropertyRepair>{
         query.setParameter("startDate", startDate);
         query.setParameter("endDate", endDate);
         if (query.getResultList().isEmpty()) {
-            throw new OwnerNotFoundException("There is no Repair between" + startDate + "and" + endDate);
+            throw new UserNotFoundException("There is no Repair between" + startDate + "and" + endDate);
         }
         return query.getResultList();
     }
-
-    public List<PropertyRepair> searchBySubmissionDate(LocalDate submissionDate) {
-        TypedQuery<PropertyRepair> query = entityManager.createQuery(
-                "SELECT r FROM PropertyRepair r WHERE r.submissionDate = :submissionDate AND isActive = TRUE", PropertyRepair.class);
-        query.setParameter("submissionDate", submissionDate);
-        if (query.getResultList().isEmpty()) {
-            throw new OwnerNotFoundException("There is no Property Repair at" + submissionDate);
-        }
-        return query.getResultList();
-    }
-
-    public List<PropertyRepair> searchByOwnerId(Long ownerId) {
-        TypedQuery<PropertyRepair> query = entityManager.createQuery(
-                "SELECT r FROM PropertyRepair r"
-                        + " WHERE r.Property.user_id = :ownerId AND isActive = TRUE", PropertyRepair.class);
-        query.setParameter("ownerId", ownerId);
-        if (query.getResultList().isEmpty()) {
-            throw new OwnerNotFoundException("There is no Owner :" + ownerId);
-        }
-        return query.getResultList();
-    }
-
-    @Override
-    public List<PropertyRepair> findAll() {
-        TypedQuery<PropertyRepair> query
-                = entityManager.createQuery("SELECT po FROM PropertyRepair po WHERE isActive = TRUE", PropertyRepair.class);
-        if (query.getResultList().isEmpty()) {
-            throw new OwnerNotFoundException("No Property Repair Found...");
-        }
-        return query.getResultList();
-    }
-
-    @Override
-    public <V> Optional<PropertyRepair> findById(V id) {
-        try {
-            entityManager.getTransaction().begin();
-            PropertyRepair repair = entityManager.find(PropertyRepair.class, id);
-            entityManager.getTransaction().commit();
-            return Optional.of(repair);
-        } catch (Exception e) {
-            log.debug("Property's repair not found");
-        }
-        return Optional.empty();
-    }
-
 }
