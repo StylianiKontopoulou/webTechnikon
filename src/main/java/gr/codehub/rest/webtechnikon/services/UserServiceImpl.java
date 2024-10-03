@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User authenticate(String username, String password) {
         User user = userRepository.findByUsername(username);
-        if (user == null || !user.getPassword().equals(password)) {
+        if (user == null || !user.getPassword().equals(password) || !user.getIsActive()) {
             throw new UserNotFoundException("User not found");
         }
 
@@ -119,6 +119,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long userId) {
-        userRepository.deleteById(userId);
+        userRepository.softDelete(userId);
     }
 }

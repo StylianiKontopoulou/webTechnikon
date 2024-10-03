@@ -98,7 +98,7 @@ public class UserResource {
 
     @DELETE
     @Path("/{userId}")
-    @RolesAllowed("ADMIN")
+    @RolesAllowed("ALL")
     public Response deleteUser(@PathParam("userId") Long userId) {
         try {
             userService.deleteUser(userId);

@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class PatternService {
 
     public static final Pattern EMAIL_PATTERN =
-            Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+            Pattern.compile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
 
     // For a strong password the input needs to be at least 4 characters including letters both lower case and
     // upper case, numbers and symbols
